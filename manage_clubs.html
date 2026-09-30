@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Club Management - CampusClub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 25px;
+            text-decoration: none;
+        }
+
+        .page-title {
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .create-box {
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .create-box h2 {
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .form-row input,
+        .form-row textarea {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+        }
+
+        .form-row textarea {
+            min-height: 80px;
+        }
+
+        .club-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
+        }
+
+        .club-card {
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .club-card h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .club-description {
+            opacity: 0.85;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .status-active {
+            background: #16a34a;
+            color: white;
+        }
+
+        .status-inactive {
+            background: #dc2626;
+            color: white;
+        }
+
+        .info-row {
+            margin: 12px 0;
+        }
+
+        .info-label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        .admin-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .admin-box h4 {
+            margin-top: 0;
+        }
+
+        .assign-form {
+            margin-top: 12px;
+        }
+
+        .assign-form input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+            margin-bottom: 10px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        button,
+        .button {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .assign-button {
+            width: 100%;
+        }
+
+        .members-button {
+            background: transparent;
+            border: 1px solid #aaa;
+        }
+
+        .toggle-button {
+            background: transparent;
+            border: 1px solid #aaa;
+        }
+
+        .warning {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 8px;
+        }
+
+        .empty {
+            padding: 40px;
+            text-align: center;
+            border-radius: 15px;
+            border: 1px dashed #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <!-- BACK -->
+    <a class="back-link"
+       href="{{ url_for('dashboard') }}">
+        ← Dashboard
+    </a>
+
+    <!-- PAGE TITLE -->
+    <h1 class="page-title">🏫 Club Management</h1>
+
+    <p class="page-subtitle">
+        Manage campus clubs, assign Club Admins and monitor club memberships.
+    </p>
+
+
+    <!-- ================================================= -->
+    <!-- CREATE CLUB -->
+    <!-- ================================================= -->
+
+    {% if session.get('user_role') in ['Super Admin', 'Admin'] %}
+
+    <div class="create-box">
+
+        <h2>Create New Club</h2>
+
+        <form method="POST"
+              action="{{ url_for('create_club') }}">
+
+            <div class="form-row">
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Club Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="coordinator_name"
+                    placeholder="Coordinator Name"
+                >
+
+            </div>
+
+            <div class="form-row">
+
+                <textarea
+                    name="description"
+                    placeholder="Club Description"
+                ></textarea>
+
+            </div>
+
+            <button type="submit">
+                ➕ Create Club
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================================================= -->
+    <!-- CLUBS -->
+    <!-- ================================================= -->
+
+    <h2>Campus Clubs</h2>
+
+    {% if clubs %}
+
+    <div class="club-grid">
+
+        {% for club in clubs %}
+
+        <div class="club-card">
+
+            <!-- CLUB NAME -->
+
+            <h2>{{ club.name }}</h2>
+
+            <!-- DESCRIPTION -->
+
+            {% if club.description %}
+            <div class="club-description">
+                {{ club.description }}
+            </div>
+            {% endif %}
+
+
+            <!-- STATUS -->
+
+            {% if club.status == 'ACTIVE' %}
+
+                <span class="status status-active">
+                    ACTIVE
+                </span>
+
+            {% else %}
+
+                <span class="status status-inactive">
+                    INACTIVE
+                </span>
+
+            {% endif %}
+
+
+            <!-- FACULTY COORDINATOR -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Faculty Coordinator
+                </div>
+
+                <div class="info-value">
+
+                    {% if club.faculty_coordinator_name %}
+                        {{ club.faculty_coordinator_name }}
+
+                    {% elif club.coordinator_name %}
+                        {{ club.coordinator_name }}
+
+                    {% else %}
+                        Not assigned
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- CLUB ADMIN -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Club Admin
+                </div>
+
+                <div class="info-value">
+
+                    {% if club.club_admin_name %}
+
+                        {{ club.club_admin_name }}
+
+                        {% if club.club_admin_email %}
+                            <br>
+                            <small>
+                                {{ club.club_admin_email }}
+                            </small>
+                        {% endif %}
+
+                    {% else %}
+
+                        Not assigned
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN ASSIGNMENT -->
+
+            {% if session.get('user_role') in ['Super Admin', 'Admin'] %}
+
+            <div class="admin-box">
+
+                <h4>Assign Club Admin</h4>
+
+                {% if club.club_admin_name %}
+
+                    <p>
+                        Current Admin:
+                        <strong>{{ club.club_admin_name }}</strong>
+                    </p>
+
+                {% else %}
+
+                    <p>
+                        No active Club Admin accounts assigned.
+                    </p>
+
+                {% endif %}
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('assign_club_admin', club_id=club.id) }}"
+                    class="assign-form"
+                >
+
+                    <input
+                        type="number"
+                        name="user_id"
+                        placeholder="Enter Club Admin User ID"
+                        min="1"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        class="assign-button"
+                    >
+                        👤 Assign Club Admin
+                    </button>
+
+                </form>
+
+                <div class="warning">
+                    Enter the numeric User ID of an active user
+                    whose role is <strong>Club Admin</strong>.
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ACTION BUTTONS -->
+
+            <div class="button-row">
+
+                <!-- MEMBERS -->
+
+                <a
+                    class="button members-button"
+                    href="{{ url_for('club_members', club_id=club.id) }}"
+                >
+                    👥 Members
+                </a>
+
+
+                <!-- ACTIVATE / DEACTIVATE -->
+
+                {% if session.get('user_role') in ['Super Admin', 'Admin'] %}
+
+                <form
+                    method="POST"
+                    action="{{ url_for('toggle_club_status', club_id=club.id) }}"
+                    style="display:inline;"
+                >
+
+                    {% if club.status == 'ACTIVE' %}
+
+                    <button
+                        type="submit"
+                        class="toggle-button"
+                    >
+                        Deactivate
+                    </button>
+
+                    {% else %}
+
+                    <button
+                        type="submit"
+                        class="toggle-button"
+                    >
+                        Activate
+                    </button>
+
+                    {% endif %}
+
+                </form>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+        <div class="empty">
+
+            <h3>No clubs available.</h3>
+
+            {% if session.get('user_role') in ['Super Admin', 'Admin'] %}
+                <p>Create your first campus club above.</p>
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

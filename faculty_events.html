@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Faculty Event Approval | CampusClub</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(99,102,241,.15),
+                    transparent 35%
+                ),
+                #080b14;
+
+            color: #f8fafc;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .page {
+            max-width: 1250px;
+            margin: auto;
+            padding: 40px 25px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .brand {
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .brand span {
+            color: #818cf8;
+        }
+
+        h1 {
+            font-size: 35px;
+            font-weight: 800;
+            margin: 20px 0 5px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+        }
+
+        .back {
+            color: #cbd5e1;
+            text-decoration: none;
+
+            border: 1px solid #293349;
+
+            padding: 10px 16px;
+
+            border-radius: 10px;
+        }
+
+        .back:hover {
+            color: white;
+            border-color: #6366f1;
+        }
+
+        .event-card {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,26,42,.96),
+                    rgba(12,16,28,.96)
+                );
+
+            border: 1px solid #273044;
+
+            border-radius: 18px;
+
+            padding: 24px;
+
+            margin-bottom: 17px;
+        }
+
+        .event-title {
+            font-size: 21px;
+            font-weight: 750;
+            margin-bottom: 8px;
+        }
+
+        .club {
+            color: #a5b4fc;
+            font-weight: 650;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .meta {
+            color: #cbd5e1;
+            line-height: 1.9;
+            font-size: 14px;
+        }
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            margin-top: 15px;
+        }
+
+        .pending {
+            color: #fbbf24;
+            background: rgba(245,158,11,.12);
+        }
+
+        .approved {
+            color: #4ade80;
+            background: rgba(34,197,94,.12);
+        }
+
+        .rejected {
+            color: #f87171;
+            background: rgba(239,68,68,.12);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .approve {
+
+            border: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #22c55e
+                );
+
+            color: white;
+
+            padding: 10px 17px;
+
+            border-radius: 10px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .reject {
+
+            border: 1px solid #7f1d1d;
+
+            background: rgba(239,68,68,.08);
+
+            color: #fca5a5;
+
+            padding: 10px 17px;
+
+            border-radius: 10px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .reason {
+
+            width: 100%;
+
+            max-width: 500px;
+
+            background: #0b1020;
+
+            border: 1px solid #293349;
+
+            color: white;
+
+            border-radius: 10px;
+
+            padding: 10px;
+
+            margin-bottom: 10px;
+        }
+
+        .reason:focus {
+
+            outline: none;
+
+            border-color: #6366f1;
+        }
+
+        .rejection {
+
+            margin-top: 12px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: rgba(239,68,68,.07);
+
+            border: 1px solid rgba(239,68,68,.15);
+
+            color: #fca5a5;
+
+            font-size: 14px;
+        }
+
+        .empty {
+
+            text-align: center;
+
+            padding: 70px 20px;
+
+            color: #64748b;
+
+            background: #111827;
+
+            border: 1px solid #273044;
+
+            border-radius: 18px;
+        }
+
+        @media (max-width: 700px) {
+
+            .top {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <div class="top">
+
+        <div>
+
+            <div class="brand">
+                Campus<span>Club</span>
+            </div>
+
+            <h1>
+                Event Approval
+            </h1>
+
+            <div class="subtitle">
+                Review and manage campus event requests.
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    {% if events %}
+
+        {% for event in events %}
+
+        <div class="event-card">
+
+
+            <div class="event-title">
+                {{ event["title"] }}
+            </div>
+
+
+            <div class="club">
+
+                🏛️
+                {{ event["club_name"] or "General Campus Event" }}
+
+            </div>
+
+
+            {% if event["description"] %}
+
+            <div class="description">
+                {{ event["description"] }}
+            </div>
+
+            {% endif %}
+
+
+            <div class="meta">
+
+                📅
+                <strong>Date:</strong>
+                {{ event["event_date"] }}
+
+                <br>
+
+                🕐
+                <strong>Time:</strong>
+                {{ event["event_time"] }}
+                -
+                {{ event["event_end_time"] }}
+
+                <br>
+
+                📍
+                <strong>Venue:</strong>
+                {{ event["venue"] }}
+
+                <br>
+
+                🏷️
+                <strong>Category:</strong>
+                {{ event["category"] }}
+
+            </div>
+
+
+            {% if event["status"] == "PENDING" %}
+
+                <span class="status pending">
+                    PENDING REVIEW
+                </span>
+
+                <div class="actions">
+
+
+                    <!-- APPROVE -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'faculty_approve_event',
+                            event_id=event['id']
+                        ) }}"
+                    >
+
+                        <button
+                            type="submit"
+                            class="approve"
+                        >
+                            ✓ Approve Event
+                        </button>
+
+                    </form>
+
+
+                    <!-- REJECT -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'faculty_reject_event',
+                            event_id=event['id']
+                        ) }}"
+                    >
+
+                        <input
+                            type="text"
+                            name="rejection_reason"
+                            class="reason"
+                            placeholder="Enter rejection reason"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="reject"
+                        >
+                            ✕ Reject Event
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+            {% elif event["status"] == "APPROVED" %}
+
+                <span class="status approved">
+                    APPROVED
+                </span>
+
+
+            {% elif event["status"] == "REJECTED" %}
+
+                <span class="status rejected">
+                    REJECTED
+                </span>
+
+
+                {% if event["rejection_reason"] %}
+
+                <div class="rejection">
+
+                    <strong>
+                        Rejection Reason:
+                    </strong>
+
+                    {{ event["rejection_reason"] }}
+
+                </div>
+
+                {% endif %}
+
+            {% endif %}
+
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="empty">
+
+            <div style="font-size:42px;">
+                📋
+            </div>
+
+            <div style="margin-top:12px;">
+                No events available for review.
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<nav class="navbar navbar-expand-lg navbar-dark"
+     style="background:#0d1220;border-bottom:1px solid rgba(255,255,255,.08);">
+
+    <div class="container-fluid px-4">
+
+        <a class="navbar-brand fw-bold" href="{{ url_for('dashboard') }}">
+            Campus<span style="color:#7c6cff;">Club</span>
+        </a>
+
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+
+            <!-- ================= STUDENT ================= -->
+            {% if role == "Student" %}
+
+                <a class="nav-link" href="{{ url_for('events') }}">Events</a>
+                <a class="nav-link" href="{{ url_for('my_registrations') }}">
+                    Registrations
+                </a>
+                <a class="nav-link" href="{{ url_for('clubs') }}">Clubs</a>
+                <a class="nav-link" href="{{ url_for('od_requests') }}">
+                    OD Requests
+                </a>
+                <a class="nav-link" href="{{ url_for('timetable') }}">
+                    Timetable
+                </a>
+                <a class="nav-link" href="{{ url_for('notifications') }}">
+                    Notifications
+                </a>
+                <a class="nav-link" href="{{ url_for('badges') }}">Badges</a>
+                <a class="nav-link" href="{{ url_for('certificates') }}">
+                    Certificates
+                </a>
+                <a class="nav-link" href="{{ url_for('student_passport') }}">
+                    Passport
+                </a>
+                <a class="nav-link" href="{{ url_for('analytics') }}">
+                    Analytics
+                </a>
+
+
+            <!-- ================= CLUB ADMIN ================= -->
+            {% elif role == "Club Admin" %}
+
+                <a class="nav-link" href="{{ url_for('dashboard') }}">
+                    Dashboard
+                </a>
+
+                <a class="nav-link" href="{{ url_for('manage_clubs') }}">
+                    Manage Clubs
+                </a>
+
+                {% if club_id %}
+                    <a class="nav-link"
+                       href="{{ url_for('club_admin_events', club_id=club_id) }}">
+                        Club Events
+                    </a>
+                {% endif %}
+
+                <a class="nav-link" href="{{ url_for('analytics') }}">
+                    Analytics
+                </a>
+
+                <a class="nav-link" href="{{ url_for('notifications') }}">
+                    Notifications
+                </a>
+
+
+            <!-- ================= FACULTY ================= -->
+            {% elif role == "Faculty" %}
+
+                <a class="nav-link" href="{{ url_for('faculty_events') }}">
+                    Event Approvals
+                </a>
+
+                <a class="nav-link" href="{{ url_for('faculty_od_requests') }}">
+                    OD Approvals
+                </a>
+
+                <a class="nav-link" href="{{ url_for('certificates') }}">
+                    Certificates
+                </a>
+
+                <a class="nav-link" href="{{ url_for('analytics') }}">
+                    Analytics
+                </a>
+
+                <a class="nav-link" href="{{ url_for('notifications') }}">
+                    Notifications
+                </a>
+
+
+            <!-- ================= ADMIN ================= -->
+            {% elif role == "Admin" %}
+
+                <a class="nav-link" href="{{ url_for('manage_clubs') }}">
+                    Clubs
+                </a>
+
+                <a class="nav-link" href="{{ url_for('admin_events') }}">
+                    Events
+                </a>
+
+                <a class="nav-link" href="{{ url_for('admin_od_requests') }}">
+                    OD Requests
+                </a>
+
+                <a class="nav-link" href="{{ url_for('certificates') }}">
+                    Certificates
+                </a>
+
+                <a class="nav-link" href="{{ url_for('admin_badges') }}">
+                    Badges
+                </a>
+
+                <a class="nav-link" href="{{ url_for('analytics') }}">
+                    Analytics
+                </a>
+
+                <a class="nav-link" href="{{ url_for('notifications') }}">
+                    Notifications
+                </a>
+
+
+            <!-- ================= SUPER ADMIN ================= -->
+            {% elif role == "Super Admin" %}
+
+                <a class="nav-link" href="{{ url_for('manage_users') }}">
+                    Users
+                </a>
+
+                <a class="nav-link" href="{{ url_for('manage_clubs') }}">
+                    Clubs
+                </a>
+
+                <a class="nav-link" href="{{ url_for('admin_events') }}">
+                    Events
+                </a>
+
+                <a class="nav-link" href="{{ url_for('timetable') }}">
+                    Timetable
+                </a>
+
+                <a class="nav-link" href="{{ url_for('admin_od_requests') }}">
+                    OD Requests
+                </a>
+
+                <a class="nav-link" href="{{ url_for('certificates') }}">
+                    Certificates
+                </a>
+
+                <a class="nav-link" href="{{ url_for('admin_badges') }}">
+                    Badges
+                </a>
+
+                <a class="nav-link" href="{{ url_for('analytics') }}">
+                    Analytics
+                </a>
+
+                <a class="nav-link" href="{{ url_for('audit_logs') }}">
+                    Audit Logs
+                </a>
+
+                <a class="nav-link" href="{{ url_for('notifications') }}">
+                    Notifications
+                </a>
+
+            {% endif %}
+
+            <a class="btn btn-outline-light btn-sm"
+               href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        </div>
+    </div>
+</nav>

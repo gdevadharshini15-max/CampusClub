@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Notifications | CampusClub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(circle at 15% 15%, rgba(108,99,255,.15), transparent 30%),
+                radial-gradient(circle at 85% 85%, rgba(0,190,255,.08), transparent 30%),
+                #080b14;
+
+            color: #eef2ff;
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+
+        /* NAVBAR */
+
+        .navbar .nav-link {
+            color: #aeb7cb !important;
+            font-size: 14px;
+        }
+
+        .navbar .nav-link:hover {
+            color: white !important;
+        }
+
+
+        /* MAIN */
+
+        .notifications-wrap {
+            max-width: 1050px;
+            margin: auto;
+            padding: 45px 20px 70px;
+        }
+
+
+        .header-card,
+        .notification-card {
+            background:
+                linear-gradient(
+                    145deg,
+                    #141a2c,
+                    #0c101d
+                );
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 18px 50px rgba(0,0,0,.2);
+        }
+
+
+        .header-card {
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+
+        .header-card h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 5px 0 8px;
+        }
+
+
+        .muted {
+            color: #9ba5bd;
+        }
+
+
+        .role-badge {
+
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(108,99,255,.15);
+
+            border:
+                1px solid rgba(108,99,255,.25);
+
+            color: #c9c5ff;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
+        /* NOTIFICATIONS */
+
+        .notification-card {
+            padding: 22px;
+            margin-bottom: 14px;
+            transition: .2s;
+        }
+
+
+        .notification-card:hover {
+
+            transform: translateY(-2px);
+
+            border-color:
+                rgba(108,99,255,.35);
+        }
+
+
+        .notification-icon {
+
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background:
+                rgba(108,99,255,.14);
+
+            font-size: 21px;
+
+            flex-shrink: 0;
+        }
+
+
+        .notification-title {
+
+            font-weight: 700;
+
+            font-size: 16px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .notification-message {
+
+            color: #9ba5bd;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        .notification-time {
+
+            color: #707a92;
+
+            font-size: 12px;
+
+            margin-top: 7px;
+        }
+
+
+        .empty {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #141a2c,
+                    #0c101d
+                );
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 20px;
+
+            padding: 60px 25px;
+
+            text-align: center;
+
+            color: #7f889f;
+        }
+
+
+        @media(max-width:768px) {
+
+            .notifications-wrap {
+                padding: 30px 15px 50px;
+            }
+
+            .header-card h1 {
+                font-size: 27px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ROLE-BASED NAVIGATION
+===================================================== -->
+
+{% include 'navbar.html' %}
+
+
+<div class="notifications-wrap">
+
+
+    <!-- HEADER -->
+
+    <div class="header-card">
+
+        <div class="muted small">
+            CampusClub · Notifications
+        </div>
+
+        <h1>
+            Notifications
+        </h1>
+
+        <div class="d-flex gap-2 flex-wrap">
+
+            <span class="role-badge">
+                {{ role }}
+            </span>
+
+            <span class="role-badge">
+                Updates & Alerts
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- NOTIFICATION LIST -->
+
+    {% if notifications %}
+
+        {% for notification in notifications %}
+
+        <div class="notification-card">
+
+            <div class="d-flex gap-3 align-items-start">
+
+                <div class="notification-icon">
+
+                    {% if notification['notification_type'] == 'SUCCESS' %}
+                        ✅
+                    {% elif notification['notification_type'] == 'WARNING' %}
+                        ⚠️
+                    {% elif notification['notification_type'] == 'ERROR' %}
+                        ❌
+                    {% else %}
+                        🔔
+                    {% endif %}
+
+                </div>
+
+
+                <div class="flex-grow-1">
+
+                    <div class="notification-title">
+                        {{ notification['title'] }}
+                    </div>
+
+                    <div class="notification-message">
+                        {{ notification['message'] }}
+                    </div>
+
+                    {% if notification['created_at'] %}
+
+                    <div class="notification-time">
+                        {{ notification['created_at'] }}
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            <div style="font-size:45px;">
+                🔔
+            </div>
+
+            <h5 class="mt-3">
+                No notifications yet
+            </h5>
+
+            <p class="mb-0">
+                You're all caught up.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Club Events | CampusClub</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(99,102,241,.15),
+                    transparent 35%
+                ),
+                #080b14;
+
+            color: #f8fafc;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .page {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 40px 25px;
+        }
+
+        /* =========================
+           TOP
+        ========================= */
+
+        .top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+        .brand {
+
+            font-size: 27px;
+
+            font-weight: 800;
+        }
+
+        .brand span {
+
+            color: #818cf8;
+        }
+
+        h1 {
+
+            font-size: 35px;
+
+            font-weight: 800;
+
+            margin: 0;
+        }
+
+        .subtitle {
+
+            color: #94a3b8;
+
+            margin-top: 7px;
+        }
+
+        .back {
+
+            color: #cbd5e1;
+
+            text-decoration: none;
+
+            border: 1px solid #293349;
+
+            padding: 10px 16px;
+
+            border-radius: 10px;
+        }
+
+        .back:hover {
+
+            color: white;
+
+            border-color: #6366f1;
+        }
+
+        /* =========================
+           CREATE BUTTON
+        ========================= */
+
+        .create {
+
+            display: inline-block;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 19px;
+
+            border-radius: 10px;
+
+            font-weight: 700;
+
+            margin-bottom: 28px;
+        }
+
+        .create:hover {
+
+            color: white;
+
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           EVENT CARD
+        ========================= */
+
+        .card {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,26,42,.96),
+                    rgba(12,16,28,.96)
+                );
+
+            border: 1px solid #273044;
+
+            border-radius: 18px;
+
+            padding: 23px;
+
+            margin-bottom: 15px;
+
+            transition: .2s;
+        }
+
+        .card:hover {
+
+            border-color: #3b4660;
+        }
+
+        .title {
+
+            font-size: 20px;
+
+            font-weight: 750;
+
+            margin-bottom: 8px;
+        }
+
+        .description {
+
+            color: #94a3b8;
+
+            line-height: 1.6;
+
+            margin-bottom: 12px;
+        }
+
+        .meta {
+
+            color: #cbd5e1;
+
+            line-height: 1.9;
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            margin-top: 13px;
+
+            letter-spacing: .3px;
+        }
+
+        .pending {
+
+            background:
+                rgba(245,158,11,.12);
+
+            color: #fbbf24;
+        }
+
+        .approved {
+
+            background:
+                rgba(34,197,94,.12);
+
+            color: #4ade80;
+        }
+
+        .rejected {
+
+            background:
+                rgba(239,68,68,.12);
+
+            color: #f87171;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+
+            background: #111827;
+
+            border: 1px solid #273044;
+
+            border-radius: 18px;
+
+            padding: 60px 20px;
+
+            text-align: center;
+
+            color: #64748b;
+        }
+
+        .empty-icon {
+
+            font-size: 42px;
+
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 700px) {
+
+            .page {
+
+                padding: 25px 15px;
+            }
+
+            .top {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            h1 {
+
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <div class="top">
+
+        <div>
+
+            <div class="brand">
+                Campus<span>Club</span>
+            </div>
+
+            <h1 style="margin-top:20px;">
+                {{ club["name"] }}
+            </h1>
+
+            <div class="subtitle">
+                Manage events for your club
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- =====================================
+         CREATE EVENT
+    ====================================== -->
+
+    <a
+        href="{{ url_for(
+            'club_admin_create_event',
+            club_id=club['id']
+        ) }}"
+        class="create"
+    >
+        + Create New Event
+    </a>
+
+
+    <!-- =====================================
+         EVENTS
+    ====================================== -->
+
+    {% if events %}
+
+        {% for event in events %}
+
+        <div class="card">
+
+
+            <div class="title">
+
+                {{ event["title"] }}
+
+            </div>
+
+
+            {% if event["description"] %}
+
+            <div class="description">
+
+                {{ event["description"] }}
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="meta">
+
+                📅
+                <strong>Date:</strong>
+                {{ event["event_date"] }}
+
+                <br>
+
+
+                🕐
+                <strong>Time:</strong>
+                {{ event["event_time"] }}
+                -
+                {{ event["event_end_time"] }}
+
+                <br>
+
+
+                📍
+                <strong>Venue:</strong>
+                {{ event["venue"] }}
+
+                <br>
+
+
+                🏷️
+                <strong>Category:</strong>
+                {{ event["category"] }}
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            {% if event["status"] == "PENDING" %}
+
+                <span class="status pending">
+                    PENDING APPROVAL
+                </span>
+
+            {% elif event["status"] == "APPROVED" %}
+
+                <span class="status approved">
+                    APPROVED
+                </span>
+
+            {% elif event["status"] == "REJECTED" %}
+
+                <span class="status rejected">
+                    REJECTED
+                </span>
+
+            {% else %}
+
+                <span class="status pending">
+                    {{ event["status"] }}
+                </span>
+
+            {% endif %}
+
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <!-- =================================
+             EMPTY STATE
+        ================================== -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📅
+            </div>
+
+            <div>
+                No events have been created for this club yet.
+            </div>
+
+            <a
+                href="{{ url_for(
+                    'club_admin_create_event',
+                    club_id=club['id']
+                ) }}"
+                class="create"
+                style="margin-top:20px;"
+            >
+                Create Your First Event
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Access Restricted | CampusClub</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(
+                    circle at 50% 20%,
+                    rgba(124, 92, 255, 0.18),
+                    transparent 35%
+                ),
+                #070b14;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 560px;
+            text-align: center;
+
+            padding: 55px 45px;
+
+            background: rgba(255,255,255,0.035);
+
+            border: 1px solid rgba(255,255,255,0.09);
+
+            border-radius: 26px;
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.45);
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+
+            margin: 0 auto 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: rgba(239,68,68,0.1);
+
+            border: 1px solid rgba(239,68,68,0.25);
+
+            font-size: 35px;
+        }
+
+        .label {
+            color: #a78bfa;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 2.5px;
+
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            margin: 0 0 15px;
+
+            font-size: 32px;
+
+            font-weight: 800;
+        }
+
+        .message {
+            color: #8d99ad;
+
+            line-height: 1.7;
+
+            font-size: 15px;
+
+            max-width: 420px;
+
+            margin: 0 auto 30px;
+        }
+
+        .role-box {
+            padding: 15px 18px;
+
+            margin-bottom: 28px;
+
+            border-radius: 12px;
+
+            background: rgba(255,255,255,0.035);
+
+            border: 1px solid rgba(255,255,255,0.07);
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+        }
+
+        .role-box strong {
+            color: white;
+        }
+
+        .buttons {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+
+            padding: 12px 20px;
+
+            border-radius: 11px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        .primary {
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c5cff,
+                    #6046e8
+                );
+        }
+
+        .secondary {
+            color: #cbd5e1;
+
+            background: rgba(255,255,255,0.05);
+
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand {
+            margin-top: 30px;
+
+            color: #566174;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="icon">
+            🔒
+        </div>
+
+        <div class="label">
+            CAMPUSCLUB SECURITY
+        </div>
+
+        <h1>
+            Access Restricted
+        </h1>
+
+        <p class="message">
+            This area is restricted to authorized administrators.
+            Your current account does not have permission to access
+            this page.
+        </p>
+
+        <div class="role-box">
+            Current role:
+            <strong>{{ session.get("user_role", "Student") }}</strong>
+        </div>
+
+        <div class="buttons">
+
+            <a
+                href="/dashboard"
+                class="btn primary"
+            >
+                ← Back to Dashboard
+            </a>
+
+            <a
+                href="/logout"
+                class="btn secondary"
+            >
+                Switch Account
+            </a>
+
+        </div>
+
+        <div class="brand">
+            ✦ CampusClub
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Event | CampusClub</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #070b14;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .page {
+            max-width: 900px;
+            margin: auto;
+            padding: 40px 25px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .label {
+            color: #8b7cff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            color: #8794a8;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #cbd5e1;
+            padding: 11px 16px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.09);
+        }
+
+        .card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 11px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.045);
+            color: white;
+            outline: none;
+        }
+
+        select option {
+            background: #101624;
+            color: white;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #7c5cff;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .notice {
+            margin-top: 22px;
+            padding: 15px 17px;
+            border-radius: 12px;
+            background: rgba(234,179,8,0.08);
+            border: 1px solid rgba(234,179,8,0.16);
+            color: #d9c77a;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .submit-area {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        button {
+            border: none;
+            border-radius: 11px;
+            padding: 13px 22px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, #7c5cff, #6046e8);
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .top {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="top">
+
+        <div>
+            <div class="label">ADMINISTRATION</div>
+
+            <h1>Create Campus Event</h1>
+
+            <div class="subtitle">
+                Create an event and submit it for approval.
+            </div>
+        </div>
+
+        <a href="/dashboard" class="back">
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="card">
+
+        <form method="POST" action="/admin/events/create">
+
+            <div class="form-grid">
+
+                <div class="full">
+
+                    <label>
+                        Event Title
+                    </label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Example: Campus Innovation Hackathon"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select name="category" required>
+
+                        <option value="">
+                            Select category
+                        </option>
+
+                        <option value="Technical">
+                            Technical
+                        </option>
+
+                        <option value="Workshop">
+                            Workshop
+                        </option>
+
+                        <option value="Cultural">
+                            Cultural
+                        </option>
+
+                        <option value="Sports">
+                            Sports
+                        </option>
+
+                        <option value="Club">
+                            Club Activity
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Venue
+                    </label>
+
+                    <input
+                        type="text"
+                        name="venue"
+                        placeholder="Example: Main Auditorium"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Event Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="event_date"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Event Start Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="event_time"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Event End Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="event_end_time"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        placeholder="Describe the event, activities and purpose..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <div class="notice">
+                🕐 <strong>Approval required:</strong>
+                New events will initially be marked as
+                <strong>PENDING</strong> and must be approved
+                before students can register.
+            </div>
+
+
+            <div class="submit-area">
+
+                <button type="submit">
+                    Create Event →
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

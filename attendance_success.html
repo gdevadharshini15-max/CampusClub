@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance | CampusClub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+
+            font-family: "Segoe UI", sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(99,102,241,.15),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(168,85,247,.12),
+                    transparent 35%
+                ),
+                #080b14;
+
+            color: #f8fafc;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+
+            background: rgba(17,24,39,.88);
+            border: 1px solid rgba(255,255,255,.08);
+
+            border-radius: 24px;
+            padding: 45px 30px;
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,.35);
+
+            backdrop-filter: blur(12px);
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            font-size: 38px;
+
+            background: rgba(34,197,94,.12);
+            border: 1px solid rgba(34,197,94,.25);
+        }
+
+        .icon.already {
+            background: rgba(234,179,8,.12);
+            border-color: rgba(234,179,8,.25);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .event {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 16px;
+
+            padding: 18px;
+            margin-bottom: 25px;
+        }
+
+        .event-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .event-info {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .back-btn {
+            display: inline-block;
+
+            text-decoration: none;
+            color: white;
+
+            background: linear-gradient(
+                135deg,
+                #7c3aed,
+                #8b5cf6
+            );
+
+            padding: 12px 22px;
+            border-radius: 12px;
+
+            font-weight: 600;
+
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow:
+                0 10px 25px rgba(124,58,237,.25);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    {% if already_attended %}
+
+        <div class="icon already">
+            ⚠️
+        </div>
+
+        <h1>
+            Already Recorded
+        </h1>
+
+        <div class="message">
+            Your attendance for this event has already been recorded.
+        </div>
+
+    {% else %}
+
+        <div class="icon">
+            ✓
+        </div>
+
+        <h1>
+            Attendance Recorded!
+        </h1>
+
+        <div class="message">
+            Your attendance has been successfully recorded in CampusClub.
+        </div>
+
+    {% endif %}
+
+
+    <div class="event">
+
+        <div class="event-name">
+            {{ event['title'] }}
+        </div>
+
+        <div class="event-info">
+
+            📅 {{ event['event_date'] }}<br>
+
+            🕐 {{ event['event_time'] }}<br>
+
+            📍 {{ event['venue'] }}
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="back-btn"
+    >
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

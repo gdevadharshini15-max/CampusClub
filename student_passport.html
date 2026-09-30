@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Engagement Passport | CampusClub</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body{background:#080b14;color:#eef2ff}.wrap{max-width:1400px;margin:auto;padding:30px 18px 70px}
+.cardx{background:linear-gradient(145deg,#151b2e,#0d1220);border:1px solid #252c40;border-radius:22px;box-shadow:0 18px 50px #0004}
+.muted{color:#9aa5bd}.hero{background:radial-gradient(circle at 85% 15%,#7565ff22,transparent 35%),linear-gradient(145deg,#171d34,#0b101d)}
+.score{font-size:3rem;font-weight:800;line-height:1}.metric{padding:18px;border-radius:16px;background:#ffffff06;border:1px solid #ffffff0b;height:100%}
+.metric .num{font-size:1.7rem;font-weight:800}.pill{font-size:.72rem;padding:5px 9px;border-radius:999px;background:#7565ff18;border:1px solid #7565ff40}
+.item{padding:14px 0;border-top:1px solid #ffffff0b}.item:first-child{border-top:0}.timeline{position:relative;padding-left:22px}.timeline:before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:#7565ff44}.dot{position:absolute;left:0;top:20px;width:12px;height:12px;border-radius:50%;background:#7565ff;box-shadow:0 0 0 4px #7565ff18}
+.table{--bs-table-bg:transparent;--bs-table-color:#eef2ff;--bs-table-border-color:#ffffff0b}
+a{color:#bcb4ff;text-decoration:none}
+</style>
+</head>
+<body>
+<!-- CAMPUSCLUB GLOBAL NAV -->
+
+<nav style="
+    background:#111827;
+    border:1px solid #273244;
+    border-radius:16px;
+    padding:12px 16px;
+    margin-bottom:24px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+">
+
+    <a href="{{ url_for('dashboard') }}"
+       style="color:white;text-decoration:none;font-weight:700;margin-right:12px;">
+        CampusClub
+    </a>
+
+    <a href="{{ url_for('dashboard') }}" class="nav-link-custom">Dashboard</a>
+    <a href="{{ url_for('events') }}" class="nav-link-custom">Events</a>
+    <a href="{{ url_for('my_registrations') }}" class="nav-link-custom">My Registrations</a>
+    <a href="{{ url_for('clubs') }}" class="nav-link-custom">Clubs</a>
+    <a href="{{ url_for('od_requests') }}" class="nav-link-custom">OD Requests</a>
+    <a href="{{ url_for('timetable') }}" class="nav-link-custom">Timetable</a>
+    <a href="{{ url_for('notifications') }}" class="nav-link-custom">Notifications</a>
+    <a href="{{ url_for('badges') }}" class="nav-link-custom">Badges</a>
+    <a href="{{ url_for('certificates') }}" class="nav-link-custom">Certificates</a>
+    <a href="{{ url_for('student_passport') }}" class="nav-link-custom">Passport</a>
+    <a href="{{ url_for('analytics') }}" class="nav-link-custom">Analytics</a>
+
+    <a href="{{ url_for('logout') }}"
+       style="
+       color:#ff9b9b;
+       text-decoration:none;
+       margin-left:auto;
+       ">
+        Logout
+    </a>
+</nav>
+
+<style>
+.nav-link-custom {
+    color:#cbd5e1;
+    text-decoration:none;
+    padding:7px 10px;
+    border-radius:8px;
+}
+
+.nav-link-custom:hover {
+    background:#1f2937;
+    color:white;
+}
+</style>
+
+<!-- END CAMPUSCLUB GLOBAL NAV -->
+
+    
+<div class="wrap">
+
+<div class="cardx hero p-4 p-md-5 mb-4 d-flex justify-content-between align-items-center flex-wrap gap-4">
+<div>
+<div class="muted small">CampusClub · Student Engagement</div>
+<h1 class="mt-2 mb-2">My Engagement Passport</h1>
+<p class="muted mb-0">Your campus journey — clubs, events, achievements, certificates and OD activity in one place.</p>
+</div>
+<div class="text-md-end">
+<div class="muted small">ENGAGEMENT POINTS</div>
+<div class="score">{{ engagement_points }}</div>
+<a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-sm mt-3">Dashboard</a>
+</div>
+</div>
+
+<div class="row g-3 mb-4">
+<div class="col-6 col-lg"><div class="cardx metric"><div class="muted small">Clubs</div><div class="num">{{ total_clubs }}</div></div></div>
+<div class="col-6 col-lg"><div class="cardx metric"><div class="muted small">Events</div><div class="num">{{ total_events }}</div></div></div>
+<div class="col-6 col-lg"><div class="cardx metric"><div class="muted small">Certificates</div><div class="num">{{ total_certificates }}</div></div></div>
+<div class="col-6 col-lg"><div class="cardx metric"><div class="muted small">Badges</div><div class="num">{{ total_badges }}</div></div></div>
+<div class="col-12 col-lg"><div class="cardx metric"><div class="muted small">Approved OD</div><div class="num">{{ approved_od }}</div></div></div>
+</div>
+
+<div class="row g-4">
+<div class="col-lg-7">
+<div class="cardx p-4 mb-4">
+<h5>Activity Timeline</h5><div class="muted small mb-3">Your latest campus activities.</div>
+{% if timeline %}
+<div class="timeline">
+{% for a in timeline %}
+<div class="item position-relative ps-3">
+<span class="dot"></span>
+<div class="d-flex justify-content-between gap-3 flex-wrap">
+<div><span class="pill">{{ a['activity_type'] }}</span><div class="mt-2">{{ a['activity'] }}</div></div>
+<div class="muted small">{{ a['activity_date'] or '—' }}</div>
+</div>
+</div>
+{% endfor %}
+</div>
+{% else %}<div class="muted py-4">Your activity timeline will appear here as you participate.</div>{% endif %}
+</div>
+
+<div class="cardx p-4">
+<h5>Event Participation</h5>
+<div class="table-responsive">
+<table class="table align-middle"><thead><tr><th>Event</th><th>Date</th><th>Status</th></tr></thead><tbody>
+{% for r in registrations %}<tr><td>{{ r['title'] }}</td><td>{{ r['event_date'] }}</td><td><span class="pill">{{ r['status'] }}</span></td></tr>
+{% else %}<tr><td colspan="3" class="muted">No event registrations yet.</td></tr>{% endfor %}
+</tbody></table>
+</div></div>
+</div>
+
+<div class="col-lg-5">
+<div class="cardx p-4 mb-4">
+<h5>My Clubs</h5>
+{% for c in clubs %}<div class="item"><div class="fw-semibold">{{ c['name'] }}</div><div class="muted small">{{ c['club_role'] }} · joined {{ c['joined_at'] }}</div></div>
+{% else %}<div class="muted py-3">You haven't joined a club yet.</div>{% endfor %}
+</div>
+
+<div class="cardx p-4 mb-4">
+<h5>Badges</h5>
+{% for b in badges %}<div class="item"><div class="fw-semibold">🏅 {{ b['name'] }}</div><div class="muted small">{{ b['description'] or 'Achievement earned on CampusClub.' }} · {{ b['awarded_at'] }}</div></div>
+{% else %}<div class="muted py-3">No badges earned yet.</div>{% endfor %}
+</div>
+
+<div class="cardx p-4">
+<h5>Certificates</h5>
+{% for c in certificates %}<div class="item"><div class="fw-semibold">{{ c['title'] }}</div><div class="muted small">{{ c['certificate_code'] }} · {{ c['issued_at'] }}</div></div>
+{% else %}<div class="muted py-3">No certificates yet.</div>{% endfor %}
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

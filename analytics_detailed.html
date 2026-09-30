@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detailed Analytics | CampusClub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+
+        body {
+            background: #0b1020;
+            color: white;
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .page {
+            max-width: 1150px;
+            margin: auto;
+            padding: 35px 20px;
+        }
+
+        .card-box {
+            background: #121a2d;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #18223a;
+            border: 1px solid #2a3857;
+            border-radius: 14px;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .stat-label {
+            color: #9ca8c7;
+            font-size: 13px;
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .table {
+            color: white;
+            vertical-align: middle;
+        }
+
+        .table th {
+            color: #9ca8c7;
+            border-bottom-color: rgba(255,255,255,.12);
+        }
+
+        .table td {
+            border-color: rgba(255,255,255,.07);
+        }
+
+        .subtitle {
+            color: #9ca8c7;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+{% include "navbar.html" %}
+
+<div class="page">
+
+    <div class="card-box">
+
+        <h1>📊 Detailed Analytics</h1>
+
+        <p class="subtitle">
+            Club performance, student engagement and approval statistics.
+        </p>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Events Attended
+                </div>
+
+                <div class="stat-value">
+                    {{ attended }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    OD Approval Rate
+                </div>
+
+                <div class="stat-value">
+                    {{ od_rate }}%
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Clubs
+                </div>
+
+                <div class="stat-value">
+                    {{ club_count }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Avg Attendance / Event
+                </div>
+
+                <div class="stat-value">
+                    {{ avg_attendance }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CLUB ANALYTICS -->
+
+    <div class="card-box">
+
+        <h4>🏫 Per-Club Analytics</h4>
+
+        <div class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+                        <th>Club</th>
+                        <th>Members</th>
+                        <th>Events</th>
+                        <th>Attendance</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for club in clubs %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ club.name }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ club.members }}
+                        </td>
+
+                        <td>
+                            {{ club.events }}
+                        </td>
+
+                        <td>
+                            {{ club.attendance }}
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+                        <td colspan="4">
+                            No club analytics available.
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- APPROVAL QUEUE -->
+
+    <div class="card-box">
+
+        <h4>⏳ Approval Queue</h4>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Pending Events
+                    </div>
+
+                    <div class="stat-value">
+                        {{ pending_events }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Pending OD Requests
+                    </div>
+
+                    <div class="stat-value">
+                        {{ pending_od }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

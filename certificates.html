@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Certificates | CampusClub</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(99,102,241,.15),
+                    transparent 35%
+                ),
+                #080b14;
+
+            color: #f8fafc;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .page {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 40px 25px;
+        }
+
+        .top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 35px;
+        }
+
+        .brand {
+
+            font-size: 27px;
+
+            font-weight: 800;
+        }
+
+        .brand span {
+
+            color: #818cf8;
+        }
+
+        h1 {
+
+            font-size: 35px;
+
+            font-weight: 800;
+
+            margin: 20px 0 5px;
+        }
+
+        .subtitle {
+
+            color: #94a3b8;
+        }
+
+        .back {
+
+            color: #cbd5e1;
+
+            text-decoration: none;
+
+            border: 1px solid #293349;
+
+            padding: 10px 16px;
+
+            border-radius: 10px;
+        }
+
+        .back:hover {
+
+            color: white;
+
+            border-color: #6366f1;
+        }
+
+        .issue {
+
+            display: inline-block;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 11px 18px;
+
+            border-radius: 10px;
+
+            font-weight: 700;
+
+            margin-bottom: 25px;
+        }
+
+        .certificate-card {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20,26,42,.96),
+                    rgba(12,16,28,.96)
+                );
+
+            border: 1px solid #273044;
+
+            border-radius: 18px;
+
+            padding: 23px;
+
+            margin-bottom: 15px;
+        }
+
+        .title {
+
+            font-size: 20px;
+
+            font-weight: 750;
+
+            margin-bottom: 8px;
+        }
+
+        .student {
+
+            color: #a5b4fc;
+
+            font-weight: 650;
+
+            margin-bottom: 10px;
+        }
+
+        .meta {
+
+            color: #94a3b8;
+
+            line-height: 1.8;
+
+            font-size: 14px;
+        }
+
+        .code {
+
+            display: inline-block;
+
+            color: #c4b5fd;
+
+            background:
+                rgba(139,92,246,.10);
+
+            border: 1px solid
+                rgba(139,92,246,.2);
+
+            padding: 5px 9px;
+
+            border-radius: 7px;
+
+            font-family: monospace;
+
+            font-size: 12px;
+
+            margin-top: 12px;
+        }
+
+        .view {
+
+            display: inline-block;
+
+            margin-top: 15px;
+
+            color: white;
+
+            text-decoration: none;
+
+            background: #1e293b;
+
+            border: 1px solid #334155;
+
+            padding: 9px 14px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+
+            font-weight: 650;
+        }
+
+        .view:hover {
+
+            border-color: #6366f1;
+
+            color: white;
+        }
+
+        .empty {
+
+            text-align: center;
+
+            padding: 70px 20px;
+
+            color: #64748b;
+
+            background: #111827;
+
+            border: 1px solid #273044;
+
+            border-radius: 18px;
+        }
+
+        @media (max-width: 700px) {
+
+            .top {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            h1 {
+
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+<!-- CAMPUSCLUB GLOBAL NAV -->
+
+<nav style="
+    background:#111827;
+    border:1px solid #273244;
+    border-radius:16px;
+    padding:12px 16px;
+    margin-bottom:24px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+">
+
+    <a href="{{ url_for('dashboard') }}"
+       style="color:white;text-decoration:none;font-weight:700;margin-right:12px;">
+        CampusClub
+    </a>
+
+    <a href="{{ url_for('dashboard') }}" class="nav-link-custom">Dashboard</a>
+    <a href="{{ url_for('events') }}" class="nav-link-custom">Events</a>
+    <a href="{{ url_for('my_registrations') }}" class="nav-link-custom">My Registrations</a>
+    <a href="{{ url_for('clubs') }}" class="nav-link-custom">Clubs</a>
+    <a href="{{ url_for('od_requests') }}" class="nav-link-custom">OD Requests</a>
+    <a href="{{ url_for('timetable') }}" class="nav-link-custom">Timetable</a>
+    <a href="{{ url_for('notifications') }}" class="nav-link-custom">Notifications</a>
+    <a href="{{ url_for('badges') }}" class="nav-link-custom">Badges</a>
+    <a href="{{ url_for('certificates') }}" class="nav-link-custom">Certificates</a>
+    <a href="{{ url_for('student_passport') }}" class="nav-link-custom">Passport</a>
+    <a href="{{ url_for('analytics') }}" class="nav-link-custom">Analytics</a>
+
+    <a href="{{ url_for('logout') }}"
+       style="
+       color:#ff9b9b;
+       text-decoration:none;
+       margin-left:auto;
+       ">
+        Logout
+    </a>
+</nav>
+
+<style>
+.nav-link-custom {
+    color:#cbd5e1;
+    text-decoration:none;
+    padding:7px 10px;
+    border-radius:8px;
+}
+
+.nav-link-custom:hover {
+    background:#1f2937;
+    color:white;
+}
+</style>
+
+<!-- END CAMPUSCLUB GLOBAL NAV -->
+
+    
+
+<div class="page">
+
+
+    <!-- HEADER -->
+
+    <div class="top">
+
+        <div>
+
+            <div class="brand">
+                Campus<span>Club</span>
+            </div>
+
+            <h1>
+                Certificates
+            </h1>
+
+            <div class="subtitle">
+                View and manage campus certificates.
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ISSUE CERTIFICATE -->
+
+    {% if session.get("user_role") in [
+        "Super Admin",
+        "Admin",
+        "Faculty"
+    ] %}
+
+    <a
+        href="{{ url_for('issue_certificate') }}"
+        class="issue"
+    >
+        + Issue Certificate
+    </a>
+
+    {% endif %}
+
+
+    <!-- CERTIFICATES -->
+
+    {% if certificates %}
+
+        {% for certificate in certificates %}
+
+        <div class="certificate-card">
+
+
+            <div class="title">
+
+                {{ certificate["title"] }}
+
+            </div>
+
+
+            {% if session.get("user_role") != "Student" %}
+
+            <div class="student">
+
+                👤
+                {{ certificate["student_name"] }}
+
+                {% if certificate["ra_number"] %}
+
+                    — {{ certificate["ra_number"] }}
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="meta">
+
+                🎓
+                <strong>Type:</strong>
+                {{ certificate["certificate_type"] }}
+
+                <br>
+
+
+                {% if certificate["event_title"] %}
+
+                🎫
+                <strong>Event:</strong>
+                {{ certificate["event_title"] }}
+
+                <br>
+
+                {% endif %}
+
+
+                {% if certificate["club_name"] %}
+
+                🏛️
+                <strong>Club:</strong>
+                {{ certificate["club_name"] }}
+
+                <br>
+
+                {% endif %}
+
+
+                {% if certificate["issued_at"] %}
+
+                📅
+                <strong>Issued:</strong>
+                {{ certificate["issued_at"] }}
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="code">
+
+                {{ certificate["certificate_code"] }}
+
+            </div>
+
+
+            <br>
+
+
+            <a
+                href="{{ url_for(
+                    'view_certificate',
+                    certificate_id=certificate['id']
+                ) }}"
+                class="view"
+            >
+                View Certificate →
+            </a>
+
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="empty">
+
+            <div style="font-size:42px;">
+                🎓
+            </div>
+
+            <div style="margin-top:12px;">
+                No certificates available yet.
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+</body>
+
+</html>

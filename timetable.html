@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Timetable Structure | CampusClub</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+        body {
+            background: #07111f;
+            color: #f8fafc;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            padding: 35px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #cbd5e1;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .back-btn:hover {
+            color: white;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .page-title {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #8fa0b5;
+            margin-bottom: 30px;
+        }
+
+        .card-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 750;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-control,
+        .form-select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 10px;
+            padding: 11px 13px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: rgba(255,255,255,0.07);
+            color: white;
+            border-color: #7c5cff;
+            box-shadow: 0 0 0 3px rgba(124,92,255,0.12);
+        }
+
+        .form-select option {
+            background: #101b2d;
+            color: white;
+        }
+
+        .create-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 20px;
+            color: white;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7c5cff, #6046e8);
+        }
+
+        .structure-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 22px;
+            margin-top: 20px;
+        }
+
+        .structure-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .structure-name {
+            font-size: 20px;
+            font-weight: 750;
+        }
+
+        .structure-meta {
+            color: #8fa0b5;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .active {
+            background: rgba(34,197,94,0.15);
+            color: #4ade80;
+        }
+
+        .inactive {
+            background: rgba(148,163,184,0.12);
+            color: #94a3b8;
+        }
+
+        .period-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .period-table th {
+            color: #94a3b8;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .period-table td {
+            padding: 13px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #dbe4ef;
+        }
+
+        .type-badge {
+            font-size: 11px;
+            padding: 5px 9px;
+            border-radius: 8px;
+            background: rgba(124,92,255,0.12);
+            color: #b9a9ff;
+        }
+
+        .period-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .activate-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 9px 15px;
+            background: rgba(34,197,94,0.15);
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: rgba(56,189,248,0.08);
+            border: 1px solid rgba(56,189,248,0.15);
+            color: #bae6fd;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #7f8da1;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 900px) {
+            .page-wrapper {
+                padding: 20px;
+            }
+
+            .structure-header {
+                flex-direction: column;
+            }
+
+            .period-table {
+                min-width: 700px;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- CAMPUSCLUB GLOBAL NAV -->
+
+<nav style="
+    background:#111827;
+    border:1px solid #273244;
+    border-radius:16px;
+    padding:12px 16px;
+    margin-bottom:24px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+">
+
+    <a href="{{ url_for('dashboard') }}"
+       style="color:white;text-decoration:none;font-weight:700;margin-right:12px;">
+        CampusClub
+    </a>
+
+    <a href="{{ url_for('dashboard') }}" class="nav-link-custom">Dashboard</a>
+    <a href="{{ url_for('events') }}" class="nav-link-custom">Events</a>
+    <a href="{{ url_for('my_registrations') }}" class="nav-link-custom">My Registrations</a>
+    <a href="{{ url_for('clubs') }}" class="nav-link-custom">Clubs</a>
+    <a href="{{ url_for('od_requests') }}" class="nav-link-custom">OD Requests</a>
+    <a href="{{ url_for('timetable') }}" class="nav-link-custom">Timetable</a>
+    <a href="{{ url_for('notifications') }}" class="nav-link-custom">Notifications</a>
+    <a href="{{ url_for('badges') }}" class="nav-link-custom">Badges</a>
+    <a href="{{ url_for('certificates') }}" class="nav-link-custom">Certificates</a>
+    <a href="{{ url_for('student_passport') }}" class="nav-link-custom">Passport</a>
+    <a href="{{ url_for('analytics') }}" class="nav-link-custom">Analytics</a>
+
+    <a href="{{ url_for('logout') }}"
+       style="
+       color:#ff9b9b;
+       text-decoration:none;
+       margin-left:auto;
+       ">
+        Logout
+    </a>
+</nav>
+
+<style>
+.nav-link-custom {
+    color:#cbd5e1;
+    text-decoration:none;
+    padding:7px 10px;
+    border-radius:8px;
+}
+
+.nav-link-custom:hover {
+    background:#1f2937;
+    color:white;
+}
+</style>
+
+<!-- END CAMPUSCLUB GLOBAL NAV -->
+
+    
+
+<div class="page-wrapper">
+
+    <div class="topbar">
+        <div class="brand">✦ CampusClub</div>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+            ← Dashboard
+        </a>
+    </div>
+
+    <h1 class="page-title">
+        Timetable Structure
+    </h1>
+
+    <p class="page-subtitle">
+        Define the common academic period structure used for event scheduling and OD period calculation.
+    </p>
+
+    {% if session.get("user_role") == "Super Admin" %}
+
+    <!-- CREATE STRUCTURE -->
+
+    <div class="card-box">
+
+        <div class="section-title">
+            Create Timetable Structure
+        </div>
+
+        <div class="info-box">
+            This defines only the timetable structure.
+            Subjects, teachers and room allocations are not included.
+        </div>
+
+        <form
+            method="POST"
+            action="{{ url_for('create_timetable_structure') }}"
+        >
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Structure Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        placeholder="e.g. Regular Day - Odd Semester 2026"
+                        required
+                    >
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Scope
+                    </label>
+
+                    <input
+                        type="text"
+                        name="scope"
+                        class="form-control"
+                        placeholder="e.g. All Students"
+                    >
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Working Days
+                    </label>
+
+                    <input
+                        type="text"
+                        name="working_days"
+                        class="form-control"
+                        placeholder="Monday,Tuesday,Wednesday,Thursday,Friday"
+                        required
+                    >
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Effective From
+                    </label>
+
+                    <input
+                        type="date"
+                        name="effective_from"
+                        class="form-control"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="create-btn mt-4"
+            >
+                + Create Structure
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- EXISTING STRUCTURES -->
+
+    <div class="card-box">
+
+        <div class="section-title">
+            Timetable Structures
+        </div>
+
+        {% if structures %}
+
+            {% for item in structures %}
+
+            {% set structure = item.structure %}
+            {% set periods = item.periods %}
+
+            <div class="structure-card">
+
+                <div class="structure-header">
+
+                    <div>
+
+                        <div class="structure-name">
+                            {{ structure["name"] }}
+                        </div>
+
+                        <div class="structure-meta">
+                            Scope:
+                            {{ structure["scope"] or "All Students" }}
+                            <br>
+
+                            Working Days:
+                            {{ structure["working_days"] }}
+                            <br>
+
+                            Effective From:
+                            {{ structure["effective_from"] }}
+                        </div>
+
+                    </div>
+
+                    {% if structure["is_active"] %}
+
+                        <span class="status-badge active">
+                            ACTIVE
+                        </span>
+
+                    {% else %}
+
+                        <span class="status-badge inactive">
+                            INACTIVE
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PERIOD TABLE -->
+
+                {% if periods %}
+
+                <div class="table-wrapper">
+
+                    <table class="period-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Period</th>
+                                <th>Label</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Duration</th>
+                                <th>Type</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for period in periods %}
+
+                            <tr>
+
+                                <td>
+                                    {{ period["period_number"] }}
+                                </td>
+
+                                <td>
+                                    {{ period["label"] }}
+                                </td>
+
+                                <td>
+                                    {{ period["start_time"] }}
+                                </td>
+
+                                <td>
+                                    {{ period["end_time"] }}
+                                </td>
+
+                                <td>
+                                    <span class="duration"
+                                          data-start="{{ period['start_time'] }}"
+                                          data-end="{{ period['end_time'] }}">
+                                        Calculating...
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="type-badge">
+
+                                        {% if period["period_type"] == "CLASS" %}
+                                            Class
+                                        {% elif period["period_type"] == "SHORT_BREAK" %}
+                                            Short Break
+                                        {% elif period["period_type"] == "LUNCH_BREAK" %}
+                                            Lunch Break
+                                        {% else %}
+                                            {{ period["period_type"] }}
+                                        {% endif %}
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+                    No periods have been added to this structure yet.
+                </div>
+
+                {% endif %}
+
+
+                {% if session.get("user_role") == "Super Admin" %}
+
+                <!-- ADD PERIOD -->
+
+                <div class="period-form">
+
+                    <div class="section-title">
+                        Add Period
+                    </div>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'add_timetable_period',
+                            structure_id=structure['id']
+                        ) }}"
+                    >
+
+                        <div class="row g-3">
+
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    Period No.
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="period_number"
+                                    class="form-control"
+                                    min="1"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <label class="form-label">
+                                    Label
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="label"
+                                    class="form-control"
+                                    placeholder="Period 1"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    Start Time
+                                </label>
+
+                                <input
+                                    type="time"
+                                    name="start_time"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    End Time
+                                </label>
+
+                                <input
+                                    type="time"
+                                    name="end_time"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <label class="form-label">
+                                    Type
+                                </label>
+
+                                <select
+                                    name="period_type"
+                                    class="form-select"
+                                >
+
+                                    <option value="CLASS">
+                                        Class
+                                    </option>
+
+                                    <option value="SHORT_BREAK">
+                                        Short Break
+                                    </option>
+
+                                    <option value="LUNCH_BREAK">
+                                        Lunch Break
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="create-btn mt-4"
+                        >
+                            + Add Period
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- ACTIVATE -->
+
+                {% if periods and not structure["is_active"] %}
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'activate_timetable_structure',
+                        structure_id=structure['id']
+                    ) }}"
+                    style="margin-top: 15px;"
+                >
+
+                    <button
+                        type="submit"
+                        class="activate-btn"
+                    >
+                        ✓ Activate This Structure
+                    </button>
+
+                </form>
+
+                {% endif %}
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h5>No timetable structures yet.</h5>
+
+                <p>
+                    Create a structure to define the campus period timings.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<script>
+function calculateDuration(start, end) {
+
+    const startParts = start.split(":");
+    const endParts = end.split(":");
+
+    const startMinutes =
+        parseInt(startParts[0]) * 60 +
+        parseInt(startParts[1]);
+
+    const endMinutes =
+        parseInt(endParts[0]) * 60 +
+        parseInt(endParts[1]);
+
+    let difference = endMinutes - startMinutes;
+
+    if (difference < 0) {
+        difference += 24 * 60;
+    }
+
+    const hours = Math.floor(difference / 60);
+    const minutes = difference % 60;
+
+    if (hours > 0 && minutes > 0) {
+        return `${hours} hr ${minutes} min`;
+    }
+
+    if (hours > 0) {
+        return `${hours} hr`;
+    }
+
+    return `${minutes} min`;
+}
+
+
+document.querySelectorAll(".duration").forEach(function(element) {
+
+    const start = element.dataset.start;
+    const end = element.dataset.end;
+
+    element.textContent = calculateDuration(start, end);
+
+});
+</script>
+
+</body>
+</html>

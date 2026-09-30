@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics | CampusClub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(108,99,255,.15), transparent 30%),
+                radial-gradient(circle at 85% 85%, rgba(0,190,255,.08), transparent 30%),
+                #080b14;
+            color: #eef2ff;
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        .analytics-wrap {
+            max-width: 1250px;
+            margin: auto;
+            padding: 45px 20px 70px;
+        }
+
+        .page-header,
+        .metric,
+        .section-card {
+            background: linear-gradient(145deg, #141a2c, #0c101d);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 20px;
+            box-shadow: 0 18px 50px rgba(0,0,0,.2);
+        }
+
+        .page-header {
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 5px 0 8px;
+        }
+
+        .muted {
+            color: #9ba5bd;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(108,99,255,.15);
+            border: 1px solid rgba(108,99,255,.25);
+            color: #c9c5ff;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .metric {
+            padding: 22px;
+            height: 100%;
+            transition: .2s;
+        }
+
+        .metric:hover {
+            transform: translateY(-3px);
+            border-color: rgba(108,99,255,.35);
+        }
+
+        .metric-label {
+            color: #9ba5bd;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-top: 8px;
+        }
+
+        .section-card {
+            padding: 24px;
+            height: 100%;
+        }
+
+        .section-title {
+            font-weight: 750;
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #eef2ff;
+            --bs-table-border-color: rgba(255,255,255,.07);
+        }
+
+        .table th {
+            color: #9ba5bd;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .empty {
+            text-align: center;
+            color: #7f889f;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ROLE-BASED NAVBAR -->
+{% include 'navbar.html' %}
+
+
+<div class="analytics-wrap">
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div class="muted small">
+            CampusClub · Analytics
+        </div>
+
+        <h1>
+            Analytics Dashboard
+        </h1>
+
+        <div class="d-flex gap-2 flex-wrap">
+
+            <span class="role-badge">
+                {{ role }}
+            </span>
+
+            {% if club_name %}
+            <span class="role-badge">
+                {{ club_name }}
+            </span>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- METRICS -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Active Users</div>
+                <div class="metric-value">{{ total_users }}</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Students</div>
+                <div class="metric-value">{{ total_students }}</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Active Clubs</div>
+                <div class="metric-value">{{ total_clubs }}</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Approved Events</div>
+                <div class="metric-value">{{ total_events }}</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Registrations</div>
+                <div class="metric-value">{{ total_registrations }}</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Pending Events</div>
+                <div class="metric-value">{{ pending_events }}</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Pending OD</div>
+                <div class="metric-value">{{ pending_od }}</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="metric">
+                <div class="metric-label">Certificates</div>
+                <div class="metric-value">{{ total_certificates }}</div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- DETAILS -->
+
+    <div class="row g-4">
+
+        <!-- TOP EVENTS -->
+
+        <div class="col-lg-7">
+
+            <div class="section-card">
+
+                <div class="section-title">
+                    📅 Top Events
+                </div>
+
+                {% if top_events %}
+
+                <div class="table-responsive">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Registrations</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for event in top_events %}
+
+                            <tr>
+                                <td>{{ event['title'] }}</td>
+                                <td>{{ event['registrations'] }}</td>
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                    <div class="empty">
+                        No event data available.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- CLUB ACTIVITY -->
+
+        <div class="col-lg-5">
+
+            <div class="section-card">
+
+                <div class="section-title">
+                    🏛️ Club Activity
+                </div>
+
+                {% if club_stats %}
+
+                    {% for club in club_stats %}
+
+                    <div class="d-flex justify-content-between align-items-center py-3"
+                         style="border-bottom:1px solid rgba(255,255,255,.06);">
+
+                        <div>
+
+                            <div class="fw-semibold">
+                                {{ club['name'] }}
+                            </div>
+
+                            <div class="muted small">
+                                Events
+                            </div>
+
+                        </div>
+
+                        <div class="fw-bold">
+                            {{ club['events'] }}
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty">
+                        No club activity available.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT ONLY -->
+
+    {% if role == "Student" %}
+
+    <div class="section-card mt-4">
+
+        <div class="section-title">
+            🎓 My Engagement
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-md-3">
+                <div class="metric">
+                    <div class="metric-label">My Registrations</div>
+                    <div class="metric-value">{{ my_registrations }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="metric">
+                    <div class="metric-label">My Clubs</div>
+                    <div class="metric-value">{{ my_clubs }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="metric">
+                    <div class="metric-label">My Certificates</div>
+                    <div class="metric-value">{{ my_certificates }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="metric">
+                    <div class="metric-label">My Badges</div>
+                    <div class="metric-value">{{ my_badges }}</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

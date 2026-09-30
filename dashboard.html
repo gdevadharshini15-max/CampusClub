@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | CampusClub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(88, 101, 242, .18), transparent 30%),
+                radial-gradient(circle at 85% 80%, rgba(0, 200, 255, .10), transparent 30%),
+                #080b14;
+            color: #f5f7ff;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        /* NAVBAR */
+
+        .navbar-custom {
+            background: rgba(12, 16, 28, .88);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            padding: 14px 28px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: -.5px;
+        }
+
+        .brand span {
+            color: #7c83ff;
+        }
+
+        .nav-link-custom {
+            color: #aeb5ca !important;
+            text-decoration: none;
+            margin-left: 22px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: .2s;
+        }
+
+        .nav-link-custom:hover {
+            color: #fff !important;
+        }
+
+        .logout-btn {
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 10px;
+            padding: 8px 14px;
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,.08);
+            color: #fff;
+        }
+
+        /* MAIN */
+
+        .container-main {
+            max-width: 1250px;
+            margin: auto;
+            padding: 55px 25px;
+        }
+
+        .welcome {
+            margin-bottom: 35px;
+        }
+
+        .welcome small {
+            color: #858da6;
+            font-size: 14px;
+        }
+
+        .welcome h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin: 8px 0;
+        }
+
+        .welcome p {
+            color: #9299af;
+            margin: 0;
+        }
+
+        .role-badge {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 7px 14px;
+            border-radius: 20px;
+            background: rgba(124,131,255,.14);
+            border: 1px solid rgba(124,131,255,.25);
+            color: #aeb3ff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* STAT CARDS */
+
+        .stat-card {
+            background: rgba(18,23,38,.82);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 18px;
+            padding: 23px;
+            height: 100%;
+            transition: .25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(124,131,255,.35);
+        }
+
+        .stat-icon {
+            font-size: 25px;
+            margin-bottom: 14px;
+        }
+
+        .stat-value {
+            font-size: 29px;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: #8e96ac;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* SECTION */
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 20px;
+        }
+
+        /* ACTION CARDS */
+
+        .action-card {
+            display: block;
+            height: 100%;
+            padding: 25px;
+            background: rgba(18,23,38,.72);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 18px;
+            text-decoration: none;
+            color: #fff;
+            transition: .25s;
+        }
+
+        .action-card:hover {
+            color: #fff;
+            transform: translateY(-4px);
+            background: rgba(24,30,49,.95);
+            border-color: rgba(124,131,255,.35);
+        }
+
+        .action-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .action-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .action-text {
+            color: #8f97ac;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* CLUB BOX */
+
+        .club-box {
+            background: linear-gradient(
+                135deg,
+                rgba(124,131,255,.14),
+                rgba(18,23,38,.8)
+            );
+            border: 1px solid rgba(124,131,255,.20);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .club-box h3 {
+            margin: 0 0 8px;
+            font-size: 23px;
+            font-weight: 750;
+        }
+
+        .club-box p {
+            color: #9299af;
+            margin: 0;
+        }
+
+        .no-club {
+            color: #f0a85c;
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 768px) {
+
+            .navbar-custom {
+                padding: 13px 16px;
+            }
+
+            .nav-link-custom {
+                margin-left: 10px;
+            }
+
+            .container-main {
+                padding: 35px 16px;
+            }
+
+            .welcome h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     ROLE-BASED NAVBAR
+========================================================= -->
+
+<nav class="navbar-custom">
+
+    <div class="d-flex align-items-center justify-content-between flex-wrap">
+
+        <a href="{{ url_for('dashboard') }}" class="brand">
+            Campus<span>Club</span>
+        </a>
+
+        <div class="d-flex align-items-center flex-wrap">
+
+            <!-- ================= STUDENT ================= -->
+
+            {% if role == "Student" %}
+
+                <a href="{{ url_for('events') }}" class="nav-link-custom">
+                    Events
+                </a>
+
+                <a href="{{ url_for('my_registrations') }}" class="nav-link-custom">
+                    Registrations
+                </a>
+
+                <a href="{{ url_for('clubs') }}" class="nav-link-custom">
+                    Clubs
+                </a>
+
+                <a href="{{ url_for('od_requests') }}" class="nav-link-custom">
+                    OD Requests
+                </a>
+
+                <a href="{{ url_for('timetable') }}" class="nav-link-custom">
+                    Timetable
+                </a>
+
+                <a href="{{ url_for('certificates') }}" class="nav-link-custom">
+                    Certificates
+                </a>
+
+                <a href="{{ url_for('badges') }}" class="nav-link-custom">
+                    Badges
+                </a>
+
+                <a href="{{ url_for('student_passport') }}" class="nav-link-custom">
+                    Passport
+                </a>
+
+                <a href="{{ url_for('notifications') }}" class="nav-link-custom">
+                    Notifications
+                </a>
+
+            <!-- ================= CLUB ADMIN ================= -->
+
+            {% elif role == "Club Admin" %}
+
+                <a href="{{ url_for('manage_clubs') }}" class="nav-link-custom">
+                    Manage Clubs
+                </a>
+
+                {% if club_id %}
+                    <a href="{{ url_for('club_admin_events', club_id=club_id) }}"
+                       class="nav-link-custom">
+                        Club Events
+                    </a>
+                {% endif %}
+
+                <a href="{{ url_for('analytics') }}" class="nav-link-custom">
+                    Analytics
+                </a>
+
+                <a href="{{ url_for('notifications') }}" class="nav-link-custom">
+                    Notifications
+                </a>
+
+            <!-- ================= FACULTY ================= -->
+
+            {% elif role == "Faculty" %}
+
+                <a href="{{ url_for('faculty_events') }}" class="nav-link-custom">
+                    Event Approvals
+                </a>
+
+                <a href="{{ url_for('faculty_od_requests') }}" class="nav-link-custom">
+                    OD Approvals
+                </a>
+
+                <a href="{{ url_for('certificates') }}" class="nav-link-custom">
+                    Certificates
+                </a>
+
+                <a href="{{ url_for('analytics') }}" class="nav-link-custom">
+                    Analytics
+                </a>
+
+                <a href="{{ url_for('notifications') }}" class="nav-link-custom">
+                    Notifications
+                </a>
+
+            <!-- ================= ADMIN ================= -->
+
+            {% elif role == "Admin" %}
+
+                <a href="{{ url_for('manage_clubs') }}" class="nav-link-custom">
+                    Clubs
+                </a>
+
+                <a href="{{ url_for('admin_events') }}" class="nav-link-custom">
+                    Events
+                </a>
+
+                <a href="{{ url_for('admin_od_requests') }}" class="nav-link-custom">
+                    OD Requests
+                </a>
+
+                <a href="{{ url_for('certificates') }}" class="nav-link-custom">
+                    Certificates
+                </a>
+
+                <a href="{{ url_for('admin_badges') }}" class="nav-link-custom">
+                    Badges
+                </a>
+
+                <a href="{{ url_for('analytics') }}" class="nav-link-custom">
+                    Analytics
+                </a>
+
+                <a href="{{ url_for('notifications') }}" class="nav-link-custom">
+                    Notifications
+                </a>
+
+            <!-- ================= SUPER ADMIN ================= -->
+
+            {% elif role == "Super Admin" %}
+
+                <a href="{{ url_for('manage_users') }}" class="nav-link-custom">
+                    Users
+                </a>
+
+                <a href="{{ url_for('manage_clubs') }}" class="nav-link-custom">
+                    Clubs
+                </a>
+
+                <a href="{{ url_for('admin_events') }}" class="nav-link-custom">
+                    Events
+                </a>
+
+                <a href="{{ url_for('timetable') }}" class="nav-link-custom">
+                    Timetable
+                </a>
+
+                <a href="{{ url_for('admin_od_requests') }}" class="nav-link-custom">
+                    OD Requests
+                </a>
+
+                <a href="{{ url_for('certificates') }}" class="nav-link-custom">
+                    Certificates
+                </a>
+
+                <a href="{{ url_for('admin_badges') }}" class="nav-link-custom">
+                    Badges
+                </a>
+
+                <a href="{{ url_for('analytics') }}" class="nav-link-custom">
+                    Analytics
+                </a>
+
+                <a href="{{ url_for('audit_logs') }}" class="nav-link-custom">
+                    Audit Logs
+                </a>
+
+                <a href="{{ url_for('notifications') }}" class="nav-link-custom">
+                    Notifications
+                </a>
+
+            {% endif %}
+
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+    </div>
+</nav>
+
+
+<!-- =========================================================
+     MAIN DASHBOARD
+========================================================= -->
+
+<div class="container-main">
+
+    <div class="welcome">
+
+        <small>CampusClub Workspace</small>
+
+        <h1>
+            Welcome back{% if session.get('user_name') %},
+            {{ session.get('user_name') }}{% endif %}
+        </h1>
+
+        <p>
+            Manage your campus activities from one place.
+        </p>
+
+        {% if role %}
+            <span class="role-badge">
+                {{ role }}
+            </span>
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         CLUB ADMIN
+    ====================================================== -->
+
+    {% if role == "Club Admin" %}
+
+        {% if club %}
+
+            <div class="club-box">
+
+                <h3>
+                    🏛️ {{ club.name }}
+                </h3>
+
+                <p>
+                    {{ club.description or "Manage your club activities, events and engagement." }}
+                </p>
+
+            </div>
+
+        {% else %}
+
+            <div class="club-box">
+
+                <h3>🏛️ Club Workspace</h3>
+
+                <p class="no-club">
+                    No club has been assigned to your account yet.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="section-title">
+            Club Overview
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">📅</div>
+
+                    <div class="stat-value">
+                        {{ stats.club_events if stats else 0 }}
+                    </div>
+
+                    <div class="stat-label">
+                        Club Events
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">⏳</div>
+
+                    <div class="stat-value">
+                        {{ stats.pending_events if stats else 0 }}
+                    </div>
+
+                    <div class="stat-label">
+                        Pending Approval
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">📊</div>
+
+                    <div class="stat-value">
+                        {{ stats.registrations if stats else 0 }}
+                    </div>
+
+                    <div class="stat-label">
+                        Event Registrations
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="section-title">
+            Club Management
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+
+                <a href="{{ url_for('manage_clubs') }}"
+                   class="action-card">
+
+                    <div class="action-icon">
+                        🏛️
+                    </div>
+
+                    <div class="action-title">
+                        Manage Club
+                    </div>
+
+                    <div class="action-text">
+                        View and manage your assigned club workspace.
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            {% if club_id %}
+
+            <div class="col-md-6 col-lg-4">
+
+                <a href="{{ url_for('club_admin_events', club_id=club_id) }}"
+                   class="action-card">
+
+                    <div class="action-icon">
+                        📅
+                    </div>
+
+                    <div class="action-title">
+                        Club Events
+                    </div>
+
+                    <div class="action-text">
+                        Create and manage events for your club.
+                    </div>
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <a href="{{ url_for('analytics') }}"
+                   class="action-card">
+
+                    <div class="action-icon">
+                        📊
+                    </div>
+
+                    <div class="action-title">
+                        Analytics
+                    </div>
+
+                    <div class="action-text">
+                        Review club activity and student engagement.
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-4">
+
+                <a href="{{ url_for('notifications') }}"
+                   class="action-card">
+
+                    <div class="action-icon">
+                        🔔
+                    </div>
+
+                    <div class="action-title">
+                        Notifications
+                    </div>
+
+                    <div class="action-text">
+                        View updates and approval notifications.
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+    <!-- =====================================================
+         STUDENT
+    ====================================================== -->
+
+    {% elif role == "Student" %}
+
+        <div class="section-title">
+            Student Overview
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value">{{ stats.events if stats else 0 }}</div>
+                    <div class="stat-label">Approved Events</div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="stat-card">
+                    <div class="stat-icon">🎟️</div>
+                    <div class="stat-value">{{ stats.registrations if stats else 0 }}</div>
+                    <div class="stat-label">My Registrations</div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-value">{{ stats.badges if stats else 0 }}</div>
+                    <div class="stat-label">Badges Earned</div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="section-title">
+            Student Services
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('events') }}" class="action-card">
+                    <div class="action-icon">📅</div>
+                    <div class="action-title">Events</div>
+                    <div class="action-text">Explore and register for campus events.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('my_registrations') }}" class="action-card">
+                    <div class="action-icon">🎟️</div>
+                    <div class="action-title">My Registrations</div>
+                    <div class="action-text">View your registered events.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('clubs') }}" class="action-card">
+                    <div class="action-icon">🏛️</div>
+                    <div class="action-title">Clubs</div>
+                    <div class="action-text">Discover and join campus clubs.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('od_requests') }}" class="action-card">
+                    <div class="action-icon">📝</div>
+                    <div class="action-title">OD Requests</div>
+                    <div class="action-text">Apply for and track your OD requests.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('timetable') }}" class="action-card">
+                    <div class="action-icon">🕐</div>
+                    <div class="action-title">Timetable</div>
+                    <div class="action-text">View the academic timetable.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('certificates') }}" class="action-card">
+                    <div class="action-icon">📜</div>
+                    <div class="action-title">Certificates</div>
+                    <div class="action-text">View your certificates.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('badges') }}" class="action-card">
+                    <div class="action-icon">🏅</div>
+                    <div class="action-title">Badges</div>
+                    <div class="action-text">View your earned badges.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('student_passport') }}" class="action-card">
+                    <div class="action-icon">🪪</div>
+                    <div class="action-title">Engagement Passport</div>
+                    <div class="action-text">View your complete campus engagement profile.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('analytics') }}" class="action-card">
+                    <div class="action-icon">📊</div>
+                    <div class="action-title">Analytics</div>
+                    <div class="action-text">View your engagement analytics.</div>
+                </a>
+            </div>
+
+        </div>
+
+
+    <!-- =====================================================
+         FACULTY
+    ====================================================== -->
+
+    {% elif role == "Faculty" %}
+
+        <div class="section-title">
+            Faculty Workspace
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('faculty_events') }}" class="action-card">
+                    <div class="action-icon">📅</div>
+                    <div class="action-title">Event Approvals</div>
+                    <div class="action-text">Review and approve club events.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('faculty_od_requests') }}" class="action-card">
+                    <div class="action-icon">📝</div>
+                    <div class="action-title">OD Approvals</div>
+                    <div class="action-text">Review student OD requests.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('certificates') }}" class="action-card">
+                    <div class="action-icon">📜</div>
+                    <div class="action-title">Certificates</div>
+                    <div class="action-text">Issue and manage certificates.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('analytics') }}" class="action-card">
+                    <div class="action-icon">📊</div>
+                    <div class="action-title">Analytics</div>
+                    <div class="action-text">View campus activity analytics.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('notifications') }}" class="action-card">
+                    <div class="action-icon">🔔</div>
+                    <div class="action-title">Notifications</div>
+                    <div class="action-text">View important updates.</div>
+                </a>
+            </div>
+
+        </div>
+
+
+    <!-- =====================================================
+         ADMIN / SUPER ADMIN
+    ====================================================== -->
+
+    {% elif role == "Admin" or role == "Super Admin" %}
+
+        <div class="section-title">
+            Administration
+        </div>
+
+        <div class="row g-4">
+
+            {% if role == "Super Admin" %}
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('manage_users') }}" class="action-card">
+                    <div class="action-icon">👥</div>
+                    <div class="action-title">User Management</div>
+                    <div class="action-text">Manage campus users and roles.</div>
+                </a>
+            </div>
+
+            {% endif %}
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('manage_clubs') }}" class="action-card">
+                    <div class="action-icon">🏛️</div>
+                    <div class="action-title">Club Management</div>
+                    <div class="action-text">Manage campus clubs and club admins.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('admin_events') }}" class="action-card">
+                    <div class="action-icon">📅</div>
+                    <div class="action-title">Event Management</div>
+                    <div class="action-text">Manage campus events.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('admin_od_requests') }}" class="action-card">
+                    <div class="action-icon">📝</div>
+                    <div class="action-title">OD Requests</div>
+                    <div class="action-text">Manage student OD requests.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('certificates') }}" class="action-card">
+                    <div class="action-icon">📜</div>
+                    <div class="action-title">Certificates</div>
+                    <div class="action-text">Manage certificates.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('admin_badges') }}" class="action-card">
+                    <div class="action-icon">🏅</div>
+                    <div class="action-title">Badges</div>
+                    <div class="action-text">Manage and award badges.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('analytics') }}" class="action-card">
+                    <div class="action-icon">📊</div>
+                    <div class="action-title">Analytics</div>
+                    <div class="action-text">View platform analytics.</div>
+                </a>
+            </div>
+
+            {% if role == "Super Admin" %}
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('timetable') }}" class="action-card">
+                    <div class="action-icon">🕐</div>
+                    <div class="action-title">Timetable</div>
+                    <div class="action-text">Manage timetable structures.</div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('audit_logs') }}" class="action-card">
+                    <div class="action-icon">🔍</div>
+                    <div class="action-title">Audit Logs</div>
+                    <div class="action-text">Review system activity and changes.</div>
+                </a>
+            </div>
+
+            {% endif %}
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('notifications') }}" class="action-card">
+                    <div class="action-icon">🔔</div>
+                    <div class="action-title">Notifications</div>
+                    <div class="action-text">View system notifications.</div>
+                </a>
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

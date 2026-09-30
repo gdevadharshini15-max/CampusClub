@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Club Members - CampusClub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div style="margin-bottom:20px;">
+        <a href="{{ url_for('dashboard') }}">← Dashboard</a>
+    </div>
+
+    <h1>👥 {{ club.name }} - Members</h1>
+    <p>Manage members and Club Admin assignments.</p>
+
+    <hr>
+
+    {% if members %}
+        <table border="1" cellpadding="10" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Club Role</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for member in members %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.role }}</td>
+                    <td>
+                        {{ member.club_role if member.club_role else "Member" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No members found for this club.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

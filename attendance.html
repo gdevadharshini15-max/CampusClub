@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QR Attendance | CampusClub</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(99,102,241,.14), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(168,85,247,.12), transparent 30%),
+                #080b14;
+            color: #f8fafc;
+        }
+
+        .page {
+            max-width: 1150px;
+            margin: auto;
+            padding: 40px 25px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .brand {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .brand span {
+            color: #8b5cf6;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #cbd5e1;
+            border: 1px solid rgba(255,255,255,.12);
+            padding: 10px 18px;
+            border-radius: 12px;
+        }
+
+        .back:hover {
+            color: white;
+            background: rgba(255,255,255,.06);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(17,24,39,.82);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 22px;
+            padding: 28px;
+            backdrop-filter: blur(12px);
+        }
+
+        .qr-card {
+            text-align: center;
+        }
+
+        .qr-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .qr-box {
+            background: white;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 25px;
+            padding: 15px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #qrcode img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .event-name {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .event-info {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .instruction {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 14px;
+            background: rgba(139,92,246,.1);
+            color: #c4b5fd;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .count {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .attendance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 17px;
+            margin-bottom: 10px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.035);
+            border: 1px solid rgba(255,255,255,.06);
+        }
+
+        .student-name {
+            font-weight: 700;
+        }
+
+        .student-email {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .attendance-time {
+            color: #a78bfa;
+            font-size: 13px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        @media(max-width: 850px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .qr-box {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="topbar">
+
+        <div class="brand">
+            Campus<span>Club</span>
+        </div>
+
+        <a href="{{ url_for('admin_events') }}" class="back">
+            ← Manage Events
+        </a>
+
+    </div>
+
+
+    <div class="layout">
+
+        <!-- QR SECTION -->
+
+        <div class="card qr-card">
+
+            <div class="qr-title">
+                📱 QR Attendance
+            </div>
+
+            <div class="subtitle">
+                Scan this QR code to mark attendance
+            </div>
+
+
+            <div class="qr-box">
+
+                <div id="qrcode"></div>
+
+            </div>
+
+
+            <div class="event-name">
+                {{ event['title'] }}
+            </div>
+
+            <div class="event-info">
+
+                📅 {{ event['event_date'] }}<br>
+
+                🕐 {{ event['event_time'] }}<br>
+
+                📍 {{ event['venue'] }}
+
+            </div>
+
+
+            <div class="instruction">
+
+                Students must log in before scanning the QR code.
+                Each student can mark attendance only once.
+
+            </div>
+
+        </div>
+
+
+        <!-- ATTENDANCE LIST -->
+
+        <div class="card">
+
+            <div class="section-title">
+                Attendance Records
+            </div>
+
+            <div class="count">
+                {{ attendance|length }} student(s) attended
+            </div>
+
+
+            {% if attendance %}
+
+                {% for student in attendance %}
+
+                <div class="attendance-row">
+
+                    <div>
+
+                        <div class="student-name">
+                            {{ student['name'] }}
+                        </div>
+
+                        <div class="student-email">
+                            {{ student['email'] }}
+                        </div>
+
+                    </div>
+
+                    <div class="attendance-time">
+                        {{ student['attended_at'] }}
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty">
+
+                    <div style="font-size:45px; margin-bottom:15px;">
+                        👥
+                    </div>
+
+                    <h5>No attendance yet</h5>
+
+                    <p>
+                        Students who scan the QR code will appear here.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- QR CODE LIBRARY -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+
+    const attendanceURL = "{{ attendance_url }}";
+
+    new QRCode(
+        document.getElementById("qrcode"),
+        {
+            text: attendanceURL,
+            width: 250,
+            height: 250,
+            correctLevel: QRCode.CorrectLevel.H
+        }
+    );
+
+</script>
+
+</body>
+</html>

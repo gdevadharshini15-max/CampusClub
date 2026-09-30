@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Management - CampusClub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .page-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 25px;
+            text-decoration: none;
+        }
+
+        .page-title {
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .card {
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+            font-size: 15px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .create-btn {
+            margin-top: 20px;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(128,128,128,0.3);
+            white-space: nowrap;
+        }
+
+        th {
+            font-weight: 700;
+        }
+
+        .status-active {
+            font-weight: 700;
+        }
+
+        .status-inactive {
+            font-weight: 700;
+        }
+
+        .action-btn {
+            padding: 7px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .ra-number {
+            font-family: monospace;
+        }
+
+        @media (max-width: 800px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <a href="{{ url_for('dashboard') }}" class="back-link">
+        ← Dashboard
+    </a>
+
+    <h1 class="page-title">👥 User Management</h1>
+
+    <p class="page-subtitle">
+        Create and manage students, faculty and administrator accounts.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- CREATE USER -->
+    <!-- ===================================================== -->
+
+    <div class="card">
+
+        <h2>➕ Create User</h2>
+
+        <p>
+            Create a new student, faculty or administrator account.
+        </p>
+
+        <form method="POST"
+              action="{{ url_for('create_user') }}">
+
+            <div class="form-grid">
+
+                <!-- NAME -->
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter full name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- EMAIL -->
+                <div class="form-group">
+
+                    <label for="email">
+                        SRM Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="example@srmist.edu.in"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Minimum 6 characters"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- ROLE -->
+                <div class="form-group">
+
+                    <label for="role">
+                        Role
+                    </label>
+
+                    <select
+                        id="role"
+                        name="role"
+                        required
+                        onchange="toggleRA()"
+                    >
+
+                        <option value="">
+                            Select Role
+                        </option>
+
+                        <option value="Student">
+                            Student
+                        </option>
+
+                        <option value="Faculty">
+                            Faculty
+                        </option>
+
+                        <option value="Club Admin">
+                            Club Admin
+                        </option>
+
+                        <option value="Admin">
+                            Admin
+                        </option>
+
+                        <option value="Super Admin">
+                            Super Admin
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- RA NUMBER -->
+                <div
+                    class="form-group full-width"
+                    id="raGroup"
+                    style="display:none;"
+                >
+
+                    <label for="ra_number">
+                        RA Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="ra_number"
+                        name="ra_number"
+                        placeholder="Example: RA2411003050397"
+                        maxlength="15"
+                    >
+
+                    <small>
+                        Required only for Student accounts.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="create-btn"
+            >
+                Create User
+            </button>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- ALL USERS -->
+    <!-- ===================================================== -->
+
+    <div class="card">
+
+        <h2>👤 All Users</h2>
+
+        <p>
+            View registered students, faculty and administrators.
+        </p>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <!-- IMPORTANT: REAL DATABASE ID -->
+                        <th>ID</th>
+
+                        <th>Name</th>
+
+                        <th>Email</th>
+
+                        <th>RA Number</th>
+
+                        <th>Role</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% if users %}
+
+                    {% for user in users %}
+
+                    <tr>
+
+                        <!-- REAL DATABASE USER ID -->
+                        <td>
+                            <strong>
+                                {{ user.id }}
+                            </strong>
+                        </td>
+
+
+                        <!-- NAME -->
+                        <td>
+                            {{ user.name }}
+                        </td>
+
+
+                        <!-- EMAIL -->
+                        <td>
+                            {{ user.email }}
+                        </td>
+
+
+                        <!-- RA NUMBER -->
+                        <td class="ra-number">
+
+                            {% if user.ra_number %}
+                                {{ user.ra_number }}
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ROLE -->
+                        <td>
+                            {{ user.role }}
+                        </td>
+
+
+                        <!-- STATUS -->
+                        <td>
+
+                            {% if user.status == "ACTIVE" %}
+
+                                <span class="status-active">
+                                    🟢 ACTIVE
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-inactive">
+                                    🔴 INACTIVE
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+                        <td>
+
+                            {% if user.id != session.get('user_id') %}
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('toggle_user_status', user_id=user.id) }}"
+                                    style="display:inline;"
+                                >
+
+                                    {% if user.status == "ACTIVE" %}
+
+                                        <button
+                                            type="submit"
+                                            class="action-btn"
+                                        >
+                                            Deactivate
+                                        </button>
+
+                                    {% else %}
+
+                                        <button
+                                            type="submit"
+                                            class="action-btn"
+                                        >
+                                            Activate
+                                        </button>
+
+                                    {% endif %}
+
+                                </form>
+
+                            {% else %}
+
+                                <span>
+                                    Current User
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            style="text-align:center;"
+                        >
+                            No users found.
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function toggleRA() {
+
+    const role =
+        document.getElementById("role").value;
+
+    const raGroup =
+        document.getElementById("raGroup");
+
+    const raInput =
+        document.getElementById("ra_number");
+
+
+    if (role === "Student") {
+
+        raGroup.style.display = "flex";
+
+        raInput.required = true;
+
+    } else {
+
+        raGroup.style.display = "none";
+
+        raInput.required = false;
+
+        raInput.value = "";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
